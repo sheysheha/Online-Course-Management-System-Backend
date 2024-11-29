@@ -3,6 +3,7 @@ package com.shei.cms.controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/files")
 public class FileUploadController {

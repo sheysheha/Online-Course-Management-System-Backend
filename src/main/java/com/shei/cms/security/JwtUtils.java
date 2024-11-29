@@ -3,6 +3,7 @@ package com.shei.cms.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -15,13 +16,23 @@ public class JwtUtils {
     private final SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
     // Generate a JWT token
-    public String generateToken(String username) {
+    public String generateToken(String username,boolean role ) {
+
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+    public String getRoleFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);  // Get role from token
     }
 
     // Extract username from the token

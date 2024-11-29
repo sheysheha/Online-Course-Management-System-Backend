@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .requireCsrfProtectionMatcher(request -> false) // Disable CSRF protection for all endpoints (for testing)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Public access to authentication APIs
+                        .requestMatchers("/api/auth/login").permitAll() // Public access to authentication APIs
                         .anyRequest().authenticated() // Authentication required for other requests
                 )
                 .httpBasic(Customizer.withDefaults()); // Enable HTTP Basic authentication

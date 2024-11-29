@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -45,7 +46,8 @@ public class AuthController {
         Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
 
         if (existingUser.isPresent() && passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
-            String token = jwtUtils.generateToken(existingUser.get().getUsername());
+            String token = jwtUtils.generateToken(existingUser.get().getUsername(), existingUser.get().getRole());
+
 
             // Prepare response data
             Map<String, Object> responseData = new HashMap<>();
