@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {
@@ -26,5 +26,9 @@ public class CourseController {
     @DeleteMapping("/{id}")
     public void deleteCourse(@PathVariable int id) {
         courseRepository.deleteById(id);
+    }
+    @GetMapping("/{id}")
+    public void findCourseById(@PathVariable int id) {
+        courseRepository.findById(id);
     }
 }
