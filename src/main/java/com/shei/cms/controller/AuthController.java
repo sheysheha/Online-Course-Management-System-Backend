@@ -48,19 +48,25 @@ public class AuthController {
         Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
 
         if (existingUser.isPresent() && passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
-            String token = jwtUtils.generateToken(existingUser.get().getUsername(), Boolean.parseBoolean(existingUser.get().getRole()));
+            User authenticatedUser = existingUser.get();
 
+            // Determine if the user is an instructor
+            boolean isInstructor = "INSTRUCTOR".equals(authenticatedUser.getRole());
+
+            // Generate JWT token
+            String token = jwtUtils.generateToken(authenticatedUser.getUsername(), isInstructor);
 
             // Prepare response data
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("token", token);
-            responseData.put("user", existingUser.get());
+            responseData.put("user", authenticatedUser);
 
             return ResponseEntity.ok(responseData);
         }
 
         return ResponseEntity.badRequest().body("Invalid credentials");
     }
+
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id) {
         Optional<User> user = userRepository.findById(id);

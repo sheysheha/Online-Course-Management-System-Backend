@@ -26,14 +26,15 @@ public class JwtUtils {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
-    public String getRoleFromToken(String token) {
+    public boolean getRoleFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("role", String.class);  // Get role from token
+                .get("role", Boolean.class); // Fetch role as Boolean
     }
+
 
     // Extract username from the token
     public String getUsernameFromToken(String token) {
